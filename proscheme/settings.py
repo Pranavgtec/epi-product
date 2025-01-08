@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'proscheme.wsgi.application'
 DATABASES = {
 'default': {
 'ENGINE': 'django.db.backends.mysql',
-'NAME': 'DB',
+'NAME': 'db',
 'USER': 'root',
 'PASSWORD': '',
 'HOST':'localhost',

@@ -35,3 +35,7 @@ def product_scheme_manage(request):
 
     # If it's a GET request, just display the empty form
     return render(request, 'product_scheme_manage.html')
+
+
+def payment_screen(request):
+    return render(request, 'payment.html')
