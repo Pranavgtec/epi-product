@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -194,7 +196,7 @@
   <!-- Form for Product Scheme Management -->
   <div class="container">
     <h1>Product Scheme Management</h1>
-    <form id="schemeForm">
+    <form id="schemeForm" action = 'payment.html'>
       <div class="form-group">
         <label for="product_id">Product ID:</label>
         <input type="text" id="product_id" placeholder="Enter Product ID" required="" readonly="">
@@ -210,7 +212,7 @@
       </div>
       <div class="form-group">
         <label for="total">Total:</label>
-        <input type="text" id="total" placeholder="Enter Total" required="" readonly="">
+        <input type="text" id="total" placeholder="Enter Total" required="" readonly="" name="total">
       </div>
       <button type="submit" id="calculateButton">Calculate</button>
     </form>
@@ -229,91 +231,94 @@
         <p><strong>Total:</strong> ₹<span id="popup_total">6000</span></p>
       </div>
       <div class="popup-buttons">
-        <button type="button" id="editBtn" class="edit-btn">Edit</button>
+        <button type="button" id="editBtn" class="edit-btn"><a href='{% url 'payment_screen' %}'>Edit</a></button>
         <button type="button" id="confirmBtn" class="confirm-btn" style="text-decoration: none;"><a href="{% url 'payment_screen' %}">Confirm</a></button>
       </div>
     </div>
   </div>
 
   <script>
-    // Function to calculate the number of days between two dates
-    function calculateDays(startDate, endDate) {
-      const start = new Date(startDate);
-      const end = new Date(endDate);
-      const timeDiff = end - start;
-      return timeDiff / (1000 * 3600 * 24); // Convert milliseconds to days
-    }
-
-    // Show the popup when "Calculate" is clicked
-    document.getElementById('schemeForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      const productId = document.getElementById('product_id').value;
-      const investment = document.getElementById('investment').value;
-      const startDate = new Date(); // Use current date for starting date
-      const endDate = new Date(startDate);
-      endDate.setDate(startDate.getDate() + 30); // Assuming 30 days for example
-      const days = calculateDays(startDate, endDate); // Calculate the days dynamically
-      const total = investment * days; // Calculate the total (customize as needed)
-
-      // Format dates to dd-mm-yyyy
-      const formatDate = (date) => date.toLocaleDateString('en-GB');
-
-      // Populate the popup with values
-      document.getElementById('popup_product_id').innerText = productId;
-      document.getElementById('popup_investment').innerText = investment;
-      document.getElementById('popup_start_date').innerText = formatDate(startDate);
-      document.getElementById('popup_end_date').innerText = formatDate(endDate);
-      document.getElementById('popup_days').innerText = days; // Show the calculated number of days
-      document.getElementById('popup_total').innerText = total;
-
-      // Show the popup
-      document.getElementById('popup').style.display = 'flex';
-    });
-
-    // Edit button logic: Close the popup and enable fields for editing
-    document.getElementById('editBtn').addEventListener('click', function () {
-      // Hide the popup
-      document.getElementById('popup').style.display = 'none';
-
-      // Enable form fields for editing
-      document.getElementById('investment').disabled = false;
-
-      // Focus on the first editable field (Investment dropdown) and show cursor
-      document.getElementById('investment').focus();
-    });
-
-    // Confirm button logic: Save and close the popup
-    document.getElementById('confirmBtn').addEventListener('click', function () {
-      const investment = document.getElementById('investment').value;
-      const total = investment * 30; // Recalculate the total
-
-      // Update the total field in the popup
-      document.getElementById('popup_total').innerText = total;
-
-      // Show alert confirming that the data is saved
-      alert('Data saved!');
-
-      // Hide the popup
-      document.getElementById('popup').style.display = 'none';
-    });
-
-    // Attach event listeners to all "View More" buttons
-    document.querySelectorAll('.buy-btn').forEach(button => {
-      button.addEventListener('click', function () {
-        const productId = this.getAttribute('data-product-id');
-        const investment = this.getAttribute('data-investment');
-
-        // Populate the fields in the form
-        document.getElementById('product_id').value = productId;
-        document.getElementById('investment').value = investment;
-
-        // Automatically calculate total based on investment and 30 days
-        const total = investment * 30; // Assuming 30 days
-        document.getElementById('total').value = total;
+   
+      // Function to calculate the number of days between two dates
+      function calculateDays(startDate, endDate) {
+          const start = new Date(startDate);
+          const end = new Date(endDate);
+          const timeDiff = end - start;
+          return timeDiff / (1000 * 3600 * 24); // Convert milliseconds to days
+      }
+  
+      // Show the popup when "Calculate" is clicked
+      document.getElementById('schemeForm').addEventListener('submit', function (e) {
+          e.preventDefault();
+  
+          const productId = document.getElementById('product_id').value;
+          const investment = document.getElementById('investment').value;
+          const startDate = new Date(); // Use current date for starting date
+          const endDate = new Date(startDate);
+          endDate.setDate(startDate.getDate() + 30); // Assuming 30 days for example
+          const days = calculateDays(startDate, endDate); // Calculate the days dynamically
+          const total = investment * days; // Calculate the total (customize as needed)
+  
+          // Format dates to dd-mm-yyyy
+          const formatDate = (date) => date.toLocaleDateString('en-GB');
+  
+          // Populate the popup with values
+          document.getElementById('popup_product_id').innerText = productId;
+          document.getElementById('popup_investment').innerText = investment;
+          document.getElementById('popup_start_date').innerText = formatDate(startDate);
+          document.getElementById('popup_end_date').innerText = formatDate(endDate);
+          document.getElementById('popup_days').innerText = days; // Show the calculated number of days
+          document.getElementById('popup_total').innerText = total;
+  
+          // Show the popup
+          document.getElementById('popup').style.display = 'flex';
       });
-    });
+  
+      // Edit button logic: Close the popup and enable fields for editing
+      document.getElementById('editBtn').addEventListener('click', function () {
+          // Hide the popup
+          document.getElementById('popup').style.display = 'none';
+  
+          // Enable form fields for editing
+          document.getElementById('investment').disabled = false;
+  
+          // Focus on the first editable field (Investment dropdown) and show cursor
+          document.getElementById('investment').focus();
+      });
+  
+      // Confirm button logic: Save and close the popup
+      document.getElementById('confirmBtn').addEventListener('click', function () {
+          const investment = document.getElementById('investment').value;
+          const total = investment * 30; // Recalculate the total
+  
+          // Store the total amount in local storage
+          localStorage.setItem('totalAmount', total);
+  
+          // Hide the popup
+          document.getElementById('popup').style.display = 'none';
+  
+          // Redirect to payment page
+          window.location.href = 'payment.html';
+      });
+  
+      // Attach event listeners to all "View More" buttons
+      document.querySelectorAll('.buy-btn').forEach(button => {
+          button.addEventListener('click', function () {
+              const productId = this.getAttribute('data-product-id');
+              const investment = this.getAttribute('data-investment');
+  
+              // Populate the fields in the form
+              document.getElementById('product_id').value = productId;
+              document.getElementById('investment').value = investment;
+  
+              // Automatically calculate total based on investment and 30 days
+              const total = investment * 30; // Assuming 30 days
+              document.getElementById('total').value = total;
+          });
+      });
   </script>
+  
+
 
    
 
